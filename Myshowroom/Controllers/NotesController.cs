@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Myshowroom.Business_logic.Contract;
 using Myshowroom.Models;
 using Myshowroom.Unit_of_work;
+using TechLearn.Business_logic.Contract;
+using TechLearn.Models.DTO_s;
 
 namespace Myshowroom.Controllers
 {
@@ -13,35 +15,32 @@ namespace Myshowroom.Controllers
     {
         private readonly IunitOfWork unitOfWork;
         private readonly INotesBusinessLogic notesRepository;
+        private readonly IDropDownsBusinesslogic dropDownsBusinesslogic;
 
-        public NotesController(IunitOfWork unitOfWork, INotesBusinessLogic notesRepository)
+        public NotesController(IunitOfWork unitOfWork, INotesBusinessLogic notesRepository, IDropDownsBusinesslogic dropDownsBusinesslogic)
         {
             this.unitOfWork = unitOfWork;
             this.notesRepository = notesRepository;
+            this.dropDownsBusinesslogic = dropDownsBusinesslogic;
         }
 
         [HttpGet("GetLearningNotes")]
-        public async Task<IActionResult> GetallCars()
+        public async Task<IActionResult> GetallLearningNotes(int? programmingLanguageId = null)
         {
-            var result = await notesRepository.GetAllAsync();
+            var result = await notesRepository.GetAllNotes(programmingLanguageId);
             unitOfWork.CommitAsync();
             return Ok(result);
         }
 
         [HttpPost("AddLearningNotes")]
-        public async Task<IActionResult> AddLearningNotes([FromBody] Notes note)
+        public async Task<IActionResult> AddLearningNotes([FromBody] NotesCreateModel note)
         {
-            try
-            {
+            
                 await notesRepository.CreateAsync(note);
                 await unitOfWork.CommitAsync();
 
                 return Ok(new { message = "Learning note added successfully" });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred while adding the learning note" });
-            }
+            
         }
 
 
@@ -74,19 +73,37 @@ namespace Myshowroom.Controllers
                 return NotFound("Learning Note not found");
             }
         }
-
-        [HttpDelete("DeleteLearningNote/{id}")]
-        public async Task<IActionResult> DeleteLearningNote(int id)
+        [HttpGet("GetLearningNote/{id}")]
+        public async Task<IActionResult> GetLearningNoteById(int id)
         {
-            var result = await notesRepository.GetByIdAsync(id);
-            if (result != null)
+            var note = await notesRepository.GetByIdAsync(id);
+            if (note != null)
             {
-                var note = await notesRepository.DeleteAsync(result);
+                return Ok(note);
             }
-            await unitOfWork.CommitAsync();
-            return Ok("Deleted successfully");
+            else
+            {
+                return NotFound("Note not found");
+            }
         }
 
+        //[HttpDelete("DeleteLearningNote/{id}")]
+        //public async Task<IActionResult> DeleteLearningNote(int id)
+        //{
+        //    var result = await notesRepository.GetByIdAsync(id);
+        //    if (result != null)
+        //    {
+        //        var note = await notesRepository.DeleteAsync(result);
+        //    }
+        //    await unitOfWork.CommitAsync();
+        //    return Ok("Deleted successfully");
+        //}
 
+        [HttpGet ("ProgrammingLanguageDropDown")]
+         public async Task<IActionResult> ProgrammingLanguageDropdown()
+         {
+           var dropdownOptions= await unitOfWork.LanguagesDropdown.Get_ProgrammingLanguages_Dropdown();
+            return Ok(dropdownOptions);
+         }
     }
 }

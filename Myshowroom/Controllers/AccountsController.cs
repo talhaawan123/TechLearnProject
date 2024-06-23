@@ -65,6 +65,15 @@ namespace Myshowroom.Controllers
             return BadRequest(ModelState);
         }
 
+        [HttpPost("logout")]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return Ok(new { message = "Logout successful" });
+        }
+
+
         private string GenerateJwtToken(IdentityUser user)
         {
             var claims = new[]
@@ -93,7 +102,9 @@ namespace Myshowroom.Controllers
         {
             var users = _userManager.Users.Select(u => new
             {
-                UserName = u.UserName,
+
+                FirstName= u.FirstName,
+                LastName=u.LastName,
                 Email = u.Email
             }).ToList();
 
@@ -118,6 +129,8 @@ namespace Myshowroom.Controllers
 
             var userProfile = new
             {
+                FirstName= user.FirstName,
+                LastName= user.LastName,
                 UserName = user.UserName,
                 Email = user.Email
             };

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Threading.Tasks.Sources;
+using TechLearn.Models.DTO_s;
 
 namespace TechLearn.Business_logic.Tests
 {
@@ -28,11 +29,12 @@ namespace TechLearn.Business_logic.Tests
             {
                 var notesBusinessLogic = new NotesBusinessLogic(context);
 
-                var note = new Notes
+                var note = new NotesCreateModel
                 {
                     Title = "Test Note",
                     Subject = "Test Subject",
-                    Body = "Test Body"
+                    Body = "Test Body",
+                    ProgrammingLanguageId = 1
                 };
 
                 // Act
@@ -44,6 +46,7 @@ namespace TechLearn.Business_logic.Tests
                 Xunit.Assert.Equal("Test Note", result.Title);
                 Xunit.Assert.Equal("Test Subject", result.Subject);
                 Xunit.Assert.Equal("Test Body", result.Body);
+                Xunit.Assert.Equal(1, result.ProgrammingLanguageId);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Myshowroom.Models;
+using TechLearn.Models.Domain_Models;
 
 namespace Myshowroom.DataContext
 {
@@ -8,9 +9,10 @@ namespace Myshowroom.DataContext
         public dataContext(DbContextOptions<dataContext> options) : base(options) { }
 
         public DbSet<Notes> LearningNotes { get; set; }
-
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
+        public virtual DbSet<ProgrammingLanguages> ProgrammingLanguages { get; set; }
+        public virtual DbSet<Jobs> Jobs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,11 +24,13 @@ namespace Myshowroom.DataContext
 
             modelBuilder.Entity<Notes>()
                 .HasKey(n => n.Id);
+
+            //modelBuilder.Entity<ProgrammingLanguages>()
+            //    .HasMany(pl => pl.Notes)
+            //    .WithOne(n => n.ProgrammingLanguage)
+            //    .HasForeignKey(n => n.ProgrammingLanguageId);
+
+            //base.OnModelCreating(modelBuilder);
         }
-
     }
-
-
-
-
 }

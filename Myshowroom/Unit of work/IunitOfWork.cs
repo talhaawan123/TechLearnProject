@@ -1,4 +1,5 @@
 ﻿using Myshowroom.Business_logic.Contract;
+using TechLearn.Business_logic.Contract;
 
 namespace Myshowroom.Unit_of_work
 {
@@ -6,6 +7,7 @@ namespace Myshowroom.Unit_of_work
     {
         INotesBusinessLogic NotesRepository { get; }
         ITestQuestionsBusinessLogic TestQuestionsRepository { get; }
+        IDropDownsBusinesslogic LanguagesDropdown { get; }
         Task CommitAsync();
 
     }

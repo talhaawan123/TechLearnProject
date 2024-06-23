@@ -1,16 +1,12 @@
-﻿using TechLearn.Models.Domain_Models;
-
-namespace Myshowroom.Models
+﻿namespace TechLearn.Models.DTO_s
 {
-    public class Notes
+    public class NotesReadModel
     {
-        public int Id { get; set; }
         public string Title { get; set; }
         public string Subject { get; set; }
         public string Body { get; set; }
         public DateTime CreatedAt { get; set; }
         public int ProgrammingLanguageId { get; set; }
-        public ProgrammingLanguages ProgrammingLanguage { get; set; }
-
     }
 }
+

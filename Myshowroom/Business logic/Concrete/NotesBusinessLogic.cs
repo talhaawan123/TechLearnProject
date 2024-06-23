@@ -2,6 +2,7 @@
 using Myshowroom.Business_logic.Contract;
 using Myshowroom.DataContext;
 using Myshowroom.Models;
+using TechLearn.Models.DTO_s;
 
 namespace Myshowroom.Business_logic.Concrete
 {
@@ -13,10 +14,18 @@ namespace Myshowroom.Business_logic.Concrete
         {
             this.dataContext = dataContext;
         }
-        public async Task<Notes> CreateAsync(Notes notes)
+        public async Task<Notes> CreateAsync(NotesCreateModel notesCreateModel)
         {
+            var notes = new Notes
+            {
+                Title = notesCreateModel.Title,
+                Subject = notesCreateModel.Subject,
+                Body = notesCreateModel.Body,
+                ProgrammingLanguageId = notesCreateModel.ProgrammingLanguageId
+            };
             await dataContext.LearningNotes.AddAsync(notes);
             await dataContext.SaveChangesAsync();
+
             return notes;
         }
 
@@ -32,13 +41,35 @@ namespace Myshowroom.Business_logic.Concrete
             return false;
 
         }
-
-        public async Task<IEnumerable<Notes>> GetAllAsync()
+        public async Task<IEnumerable<NotesReadModel>> GetAllNotes(int? programmingLanguageId = null)
         {
-            await dataContext.LearningNotes.ToListAsync();
-            return dataContext.LearningNotes;
+            IQueryable<Notes> query = dataContext.LearningNotes;
 
+            query = FilterNotes(programmingLanguageId, query);
+
+            var notes = await query.ToListAsync();
+
+            var notesReadModels = notes.Select(note => new NotesReadModel
+            {
+                Title = note.Title,
+                Subject = note.Subject,
+                Body = note.Body,
+                ProgrammingLanguageId = note.ProgrammingLanguageId
+            }).ToList();
+
+            return notesReadModels;
         }
+
+        private static IQueryable<Notes> FilterNotes(int? programmingLanguageId, IQueryable<Notes> query)
+        {
+            if (programmingLanguageId != null)
+            {
+                query = query.Where(n => n.ProgrammingLanguageId == programmingLanguageId);
+            }
+
+            return query;
+        }
+
         public async Task<int> GetNotesCountAsync()
         {
             int countOfNotes = await dataContext.LearningNotes.CountAsync();
@@ -46,9 +77,23 @@ namespace Myshowroom.Business_logic.Concrete
 
         }
 
-        public async Task<Notes> GetByIdAsync(int id)
+        public async Task<NotesReadModel> GetByIdAsync(int id)
         {
-            return await dataContext.LearningNotes.FindAsync(id);
+            var note = await dataContext.LearningNotes.FindAsync(id);
+            if (note != null)
+            {
+                return new NotesReadModel
+                {
+                    Title = note.Title,
+                    Subject = note.Subject,
+                    Body = note.Body,
+                    ProgrammingLanguageId = note.ProgrammingLanguageId
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<Notes> UpdateAsync(Notes note)

@@ -8,6 +8,8 @@ using Myshowroom.DataContext;
 using Myshowroom.Models.NewFolder;
 using Myshowroom.Unit_of_work;
 using System.Text;
+using TechLearn.Business_logic.Concrete;
+using TechLearn.Business_logic.Contract;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +43,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<INotesBusinessLogic, NotesBusinessLogic>();
 builder.Services.AddScoped<ITestQuestionsBusinessLogic, TestQuestionsBusinessLogic>();
 builder.Services.AddScoped<IunitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IDropDownsBusinesslogic, DropDownsBusinesslogic>();  
 builder.Services.AddDbContext<ApplicationUserDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection")));
 builder.Services.AddDbContext<dataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
