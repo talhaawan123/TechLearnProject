@@ -32,6 +32,26 @@ namespace Myshowroom.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetNotesAnalytics")]
+        public async Task<IActionResult> GetNotesAnalytics()
+        {
+            var today = DateTime.Today;
+            var sevenDaysAgo = today.AddDays(-6); 
+            var notes = await notesRepository.GetAllNotesAnalytics()
+                .Where(n => n.CreatedAt.Date >= sevenDaysAgo && n.CreatedAt.Date <= today)
+                .ToListAsync();
+                 var analytics = Enumerable.Range(0, 7)
+                .Select(offset => today.AddDays(-offset))
+                .Select(date => new
+                {
+                    Date = date,
+                    Count = notes.Count(n => n.CreatedAt.Date == date)
+                })
+                .OrderBy(a => a.Date);
+
+            return Ok(analytics);
+        }
+
         [HttpPost("AddLearningNotes")]
         public async Task<IActionResult> AddLearningNotes([FromBody] NotesCreateModel note)
         {

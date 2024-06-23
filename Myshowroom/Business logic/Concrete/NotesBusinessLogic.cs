@@ -21,7 +21,8 @@ namespace Myshowroom.Business_logic.Concrete
                 Title = notesCreateModel.Title,
                 Subject = notesCreateModel.Subject,
                 Body = notesCreateModel.Body,
-                ProgrammingLanguageId = notesCreateModel.ProgrammingLanguageId
+                ProgrammingLanguageId = notesCreateModel.ProgrammingLanguageId,
+                CreatedAt = DateTime.UtcNow
             };
             await dataContext.LearningNotes.AddAsync(notes);
             await dataContext.SaveChangesAsync();
@@ -41,6 +42,16 @@ namespace Myshowroom.Business_logic.Concrete
             return false;
 
         }
+
+        public IQueryable<Notes> GetAllNotesAnalytics(int? programmingLanguageId = null)
+        {
+            IQueryable<Notes> query = dataContext.LearningNotes;
+
+            query = FilterNotes(programmingLanguageId, query);
+
+            return query;
+        }
+
         public async Task<IEnumerable<NotesReadModel>> GetAllNotes(int? programmingLanguageId = null)
         {
             IQueryable<Notes> query = dataContext.LearningNotes;
@@ -54,6 +65,7 @@ namespace Myshowroom.Business_logic.Concrete
                 Title = note.Title,
                 Subject = note.Subject,
                 Body = note.Body,
+                CreatedAt = DateTime.UtcNow,
                 ProgrammingLanguageId = note.ProgrammingLanguageId
             }).ToList();
 

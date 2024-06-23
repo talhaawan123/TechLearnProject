@@ -10,6 +10,7 @@ namespace Myshowroom.Business_logic.Contract
         Task<bool> DeleteAsync (Notes notes);
         Task<NotesReadModel> GetByIdAsync (int id);
         Task<IEnumerable<NotesReadModel>> GetAllNotes(int? programmingLanguageId = null);
+        IQueryable<Notes> GetAllNotesAnalytics(int? programmingLanguageId = null);
         Task<int> GetNotesCountAsync();
     }
 }

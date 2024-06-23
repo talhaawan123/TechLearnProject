@@ -17,15 +17,14 @@ namespace TechLearn.Controllers
           this._dataContext = _dataContext;
         }
 
-        [HttpGet]
+        [HttpGet("ListofJobs")]
         public async Task<IActionResult> Get()
         {
             var jobs = await _dataContext.Jobs.ToListAsync();
             return Ok(jobs);
         }
 
-        [HttpPost]
-
+        [HttpPost("PostJob")]
         public async Task<IActionResult> PostJob([FromBody] JobCreateModel model )
         {
             var job = new Jobs
@@ -37,8 +36,16 @@ namespace TechLearn.Controllers
             };
 
             await _dataContext.Jobs.AddAsync(job);
-            _dataContext.SaveChanges();
+            await _dataContext.SaveChangesAsync();
             return Ok(job);
+        }
+
+
+        [HttpGet("JobsCount")]
+        public async Task<IActionResult> GetNumberofJobs()
+        {
+            var Jobscount = await _dataContext.Jobs.CountAsync();
+            return Ok(Jobscount);
         }
     }
 }
