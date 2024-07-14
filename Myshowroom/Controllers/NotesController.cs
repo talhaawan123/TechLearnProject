@@ -125,5 +125,13 @@ namespace Myshowroom.Controllers
            var dropdownOptions= await unitOfWork.LanguagesDropdown.Get_ProgrammingLanguages_Dropdown();
             return Ok(dropdownOptions);
          }
+
+        [HttpGet("GetNotesCountByProgrammingLanguage")]
+        public async Task<IActionResult> GetNotesCountByProgrammingLanguage()
+        {
+            var counts = await notesRepository.GetNotesCountByProgrammingLanguageAsync();
+            return Ok(counts);
+        }
+
     }
 }

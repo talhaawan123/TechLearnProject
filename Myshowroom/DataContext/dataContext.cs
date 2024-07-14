@@ -9,28 +9,28 @@ namespace Myshowroom.DataContext
         public dataContext(DbContextOptions<dataContext> options) : base(options) { }
 
         public DbSet<Notes> LearningNotes { get; set; }
-        public DbSet<Question> Questions { get; set; }
-        public DbSet<Answer> Answers { get; set; }
         public virtual DbSet<ProgrammingLanguages> ProgrammingLanguages { get; set; }
         public virtual DbSet<Jobs> Jobs { get; set; }
+        public DbSet<Assessment> Assessments { get; set; }
+        public DbSet<Option> Options { get; set; }
+        public DbSet<StudentResponse> StudentResponses { get; set; }
+        public DbSet<QuizResult> QuizResults { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Question>()
-                .HasMany(q => q.Answers)
-                .WithOne(a => a.Question)
-                .HasForeignKey(a => a.QuestionId)
-                .OnDelete(DeleteBehavior.Cascade);
-
             modelBuilder.Entity<Notes>()
                 .HasKey(n => n.Id);
 
-            //modelBuilder.Entity<ProgrammingLanguages>()
-            //    .HasMany(pl => pl.Notes)
-            //    .WithOne(n => n.ProgrammingLanguage)
-            //    .HasForeignKey(n => n.ProgrammingLanguageId);
+            modelBuilder.Entity<ProgrammingLanguages>()
+                .HasKey(pl => pl.Id);
 
-            //base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Assessment>()
+           .HasMany(a => a.Options)
+           .WithOne(o => o.Assessment)
+           .HasForeignKey(o => o.AssessmentId);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

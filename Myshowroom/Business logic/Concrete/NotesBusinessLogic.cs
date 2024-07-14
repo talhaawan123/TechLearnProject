@@ -88,7 +88,15 @@ namespace Myshowroom.Business_logic.Concrete
             return countOfNotes;
 
         }
+        public async Task<Dictionary<int, int>> GetNotesCountByProgrammingLanguageAsync()
+        {
+            var counts = await dataContext.LearningNotes
+                .GroupBy(n => n.ProgrammingLanguageId)
+                .Select(g => new { ProgrammingLanguageId = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.ProgrammingLanguageId, x => x.Count);
 
+            return counts;
+        }
         public async Task<NotesReadModel> GetByIdAsync(int id)
         {
             var note = await dataContext.LearningNotes.FindAsync(id);

@@ -5,7 +5,7 @@
 namespace Myshowroom.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateIdentityys : Migration
+    public partial class assessments : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

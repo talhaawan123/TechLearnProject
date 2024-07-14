@@ -13,4 +13,10 @@ namespace Myshowroom.Models
         public ProgrammingLanguages ProgrammingLanguage { get; set; }
 
     }
+
+    public class CodeRequest
+    {
+        public string Code { get; set; }
+        public string Language { get; set; }
+    }
 }

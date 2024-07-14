@@ -17,7 +17,6 @@ namespace Myshowroom.Unit_of_work
         {
             this.dataContext = datacontext;
             notesRepository = new NotesBusinessLogic(dataContext);
-            testQuestionsRepository = new TestQuestionsBusinessLogic(dataContext);
             dropDownsBusinessLogic = new DropDownsBusinesslogic(dataContext);
         }
 

@@ -12,5 +12,6 @@ namespace Myshowroom.Business_logic.Contract
         Task<IEnumerable<NotesReadModel>> GetAllNotes(int? programmingLanguageId = null);
         IQueryable<Notes> GetAllNotesAnalytics(int? programmingLanguageId = null);
         Task<int> GetNotesCountAsync();
+        Task<Dictionary<int, int>> GetNotesCountByProgrammingLanguageAsync();
     }
 }

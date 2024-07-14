@@ -14,6 +14,7 @@ using TechLearn.Business_logic.Contract;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddHttpClient();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -38,10 +39,13 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
 });
-
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromHours(2);
+});
 builder.Services.AddControllers();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<INotesBusinessLogic, NotesBusinessLogic>();
-builder.Services.AddScoped<ITestQuestionsBusinessLogic, TestQuestionsBusinessLogic>();
 builder.Services.AddScoped<IunitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IDropDownsBusinesslogic, DropDownsBusinesslogic>();  
 builder.Services.AddDbContext<ApplicationUserDbContext>(options =>

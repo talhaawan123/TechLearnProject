@@ -1,4 +1,6 @@
-﻿namespace TechLearn.Models.Domain_Models
+﻿using Myshowroom.Models;
+
+namespace TechLearn.Models.Domain_Models
 {
     public class ProgrammingLanguages
     {
@@ -6,4 +8,8 @@
         public string Name { get; set; }
 
     }
+
+  
+
+
 }
